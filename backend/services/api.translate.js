@@ -2,18 +2,6 @@ const axios = require('axios').default;
 
 // TODO RATELIMIT ERROR 429
 
-const translateToGalaxy = async(data, language) => {
-    const {translatedText} = data;
-
-    const response = await axios
-    .post('https://api.funtranslations.com/translate/' + language, {
-        text: translatedText
-    });
-
-    return response.data;
-    
-}
-
 const translateToEnglish = async(data) => {
     const {q} = data;
 
@@ -27,26 +15,42 @@ const translateToEnglish = async(data) => {
     return response.data;
 }
 
+
+const translateToGalaxy = async(data, language) => {
+    const {translatedText} = data;
+
+    const response = await axios
+    .post('https://api.funtranslations.com/translate/' + language, {
+        text: translatedText
+    });
+
+    return response.data;
+    
+}
+// TODO CHECK IF LANGUAGE NEED TRANSLATE TO PORTUGUESE
+
+// const translateToPortuguese = async(data) => {
+//         const {translated} = data;
+        
+//         const q = translated;
+
+//         const response = await axios
+//         .post('https://libretranslate.com/translate', {
+//             q: q,
+//             source: "en",
+//             target: "pt"
+//         });
+    
+//         return response.data;
+// }
+
 const translate = async(data, language) => {
     const messageEnglish = await translateToEnglish(data);
     const messageGalaxy = await translateToGalaxy(messageEnglish, language);
-    console.log(messageGalaxy);
+    const messagePortuguese = await translateToPortuguese(messageGalaxy);
+    return messagePortuguese;
 }
 
-// translate();
 
-
-// const translateToPortuguese = async(data) => {
-    //     const {translated} = data;
-        
-    //     const response = await axios
-    //     .post('https://libretranslate.com/translate', {
-    //         q: q,
-    //         source: "en",
-    //         target: "pt"
-    //     });
-    
-    //     return response.data;
-    
-    // }
+module.exports.translate = translate;
     
